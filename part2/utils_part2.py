@@ -65,33 +65,6 @@ def csv_remove_duplicates(input_file_path=None, output_file_path=None, drop_head
     return current_row_idx, dups_cnt, dups_idx_list
     
 
-
-def clean_csv_old(input_file_path=None, chars_to_remove = ['"', ';']):
-    
-    with open(input_file_path, newline='') as csvfile:
-        
-        reader = csv.reader(csvfile, quotechar='"', delimiter=',', quoting=csv.QUOTE_NONE)
-
-        # Initializations
-        final_list_of_rows = []
-
-        for row in reader:
-            row_cln = row.copy()
-            for char in chars_to_remove:
-                row_cln = list(map(lambda x: x.replace(char,''), row_cln))
-
-            final_list_of_rows.append(row_cln)
-            
-    
-    output_file_path = input_file_path.replace('.csv','_cln.csv')
-    
-    with open(output_file_path, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        
-        for row in final_list_of_rows:
-            writer.writerow(row)
-            
-
 def clean_csv(input_file_path=None, chars_to_remove = ['"', ';']):
     
     # Read input file
@@ -197,17 +170,13 @@ class Node:
     def print_table(self, row_values_dict={}, duplicates='drop', to=None, _depth=0):
         
         if _depth == 0:
-            # first function iteration
-            if to is None:
-                pass
-                
-            elif isinstance(to, str):
-                # overwrite file and insert column headers
-                with open(to, "w") as myfile:
-                    row_str = ','.join(self.node_hierarchy) + '\n'
-                    # row_str = ';'.join(self.node_hierarchy) + '\n'
-                    myfile.write(row_str)  
-                
+            # first function iteration: write header
+            col_nums = ['col_' + str(i) for i in range(len(self.node_hierarchy))]
+            col_names = self.node_hierarchy
+            header_dict = dict(zip(col_nums, col_names))
+            
+            self._print_row(header_dict, to)
+
 
         if len(self.children) > 0:
             # Children are still trees
@@ -240,14 +209,38 @@ class Node:
     
     
     def tree_to_df(self, duplicates='drop'):
+        
+        temp_file_name = '_temp_file.csv'
+        # delete the temp file if it exists
+        try:
+            os.remove(temp_file_name)
+        except OSError:
+            pass
 
-        self.print_table(to='_temp_file.csv', duplicates=duplicates)
-        df = pd.read_csv('_temp_file.csv', sep=';')
-        #os.remove('_temp_file.csv')
+        # print tree table to temp file
+        self.print_table(to=temp_file_name, duplicates=duplicates)
+        # read temp file to df
+        df = pd.read_csv(temp_file_name, sep=',')
+        #os.remove(temp_file_name)
         
         return df
-    
+
     def _print_row(self, row_values_dict, to=None):
+
+        if to is None:
+            # print to stdout
+            print(row_values_dict)
+            
+        elif isinstance(to, str):
+            # print to file
+            with open(to, 'a', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                writer.writerow(list(row_values_dict.values())) 
+
+        return
+
+    
+    def _print_row_old(self, row_values_dict, to=None):
 
         if to is None:
             # print to stdout
