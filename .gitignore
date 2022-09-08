@@ -1,7 +1,7 @@
 # Datasets
 ./part2/input_data/algorithms part dataset*.csv
-./part1/input_data/testing_data
-./part1/input_data/training_data
+./part1/input_data/testing_data/*
+./part1/input_data/training_data/*
 
 
 # Byte-compiled / optimized / DLL files
