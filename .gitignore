@@ -2,6 +2,9 @@
 part2/input_data/algorithms part dataset*.csv
 part1/input_data/testing_data/*
 part1/input_data/training_data/*
+part1/df_test.csv
+part1/df_train.csv
+part1/test_feat.xlsx
 
 
 # Byte-compiled / optimized / DLL files
