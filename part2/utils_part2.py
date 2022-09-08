@@ -10,21 +10,26 @@ import pandas as pd
 
 
 def csv_remove_duplicates(input_file_path=None, output_file_path=None, drop_header=False,
-                          cols_to_drop=[], verbose=False):
+                          cols_to_drop=[], has_header=True, verbose=False):
     
     with open(input_file_path, newline='') as csvfile:
         
         reader = csv.reader(csvfile, quotechar='"', delimiter=',')
         
         # Initializations
-        current_row_idx = -1
         final_list_of_rows = []
         dups_cnt = 0
         dups_idx_list = []
+        if has_header:
+            # If file has header, then current_row_idx will be
+            # updated to -1 when reading header and to 0 when 
+            # reading the first data row.
+            current_row_idx = -2
+        else:
+            current_row_idx = -1
         
         if drop_header:
             next(reader)
-            current_row_idx += 1
             
         for row in reader:
             current_row_idx += 1
