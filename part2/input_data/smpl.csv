@@ -1,0 +1,12 @@
+ID,GAME_NAME,BEHAVIOUR,PLAY_PURCHASE,NONE;
+"151603712,""The Elder Scrolls V Skyrim"",purchase,1.0,0";
+"151603712,""The Elder Scrolls V Skyrim"",play,273.0,0";
+"151603712,""Fallout 4"",purchase,1.0,0";
+"151603712,""Fallout 4"",purchase,1.0,5";
+"151603712,""Fallout 4"",play,87.0,0";
+"151603712,""Spore"",purchase,1.0,0";
+"151603712,""Spore"",play,14.9,0";
+"151603712,""Spore"",play,14.9,2";
+"151603712,""Fallout New Vegas"",purchase,1.0,0";
+
+
