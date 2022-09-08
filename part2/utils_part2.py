@@ -154,18 +154,19 @@ class Node:
             self.children[children_idx].count_rows += 1
 
         if _depth == 0:
-            print('validation rows')
             self._validate_row_counts()
             pass
 
     
-    def print_tree(self, ident_count=0):
+    def print_tree(self, ident_count=0, num_levels=15):
         
-        print("    "*ident_count, self.node_type, self.value, self.count_rows, sep=' | ')
+        if num_levels > 0:
+            print("    "*ident_count, self.node_type, self.value, self.count_rows, sep=' | ')
         
         if len(self.children) > 0:
             for child in self.children:
-                child.print_tree(ident_count+1)
+                num_levels -= 1
+                child.print_tree(ident_count+1, num_levels)
 
         return
     
@@ -224,7 +225,7 @@ class Node:
         self.print_table(to=temp_file_name, duplicates=duplicates)
         # read temp file to df
         df = pd.read_csv(temp_file_name, sep=',')
-        #os.remove(temp_file_name)
+        os.remove(temp_file_name)
         
         return df
 
