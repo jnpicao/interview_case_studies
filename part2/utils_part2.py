@@ -120,7 +120,7 @@ class Node:
             self.add_row(row)            
         return
     
-    def add_row(self, row):
+    def add_row(self, row, _depth=0):
         
         assert len(set(self.node_hierarchy) - set(row.index)) == 0, \
         "All node_hierarchy values must be row indexes"
@@ -147,13 +147,16 @@ class Node:
                
         if len(children_nodes_hierarchy) > 0:
             # Children are still trees: update hierarchy levels below
-            self.children[children_idx].add_row(row)
+            self.children[children_idx].add_row(row, _depth+1)
         
         else:
             # Children are final nodes: Update rows count
             self.children[children_idx].count_rows += 1
-            
-        self._validate_row_counts()
+
+        if _depth == 0:
+            print('validation rows')
+            self._validate_row_counts()
+            pass
 
     
     def print_tree(self, ident_count=0):
