@@ -204,7 +204,8 @@ class Node:
             elif isinstance(to, str):
                 # overwrite file and insert column headers
                 with open(to, "w") as myfile:
-                    row_str = ';'.join(self.node_hierarchy) + '\n'
+                    row_str = ','.join(self.node_hierarchy) + '\n'
+                    # row_str = ';'.join(self.node_hierarchy) + '\n'
                     myfile.write(row_str)  
                 
 
@@ -255,8 +256,8 @@ class Node:
         elif isinstance(to, str):
             # print to file
             with open(to, "a") as myfile:
-                #row_str = ','.join(str(value) for value in row_values_dict.values()) + '\n'
-                row_str = ';'.join([str(value) for value in row_values_dict.values()]) + '\n'
+                row_str = ','.join(str(value) for value in row_values_dict.values()) + '\n'
+                # row_str = ';'.join([str(value) for value in row_values_dict.values()]) + '\n'
                 myfile.write(row_str)            
             
         return
