@@ -8,14 +8,13 @@ from typing import List
 
 import pandas as pd
 
-input_file_path = os.path.join('..', 'algorithms part dataset', 'smpl.csv')
 
-def csv_remove_duplicates(input_file_path=None, drop_header=False,
-                          cols_to_drop=[4], chars_to_remove = ['"', ';']):
+def csv_remove_duplicates(input_file_path=None, output_file_path=None, drop_header=False,
+                          cols_to_drop=[], verbose=False):
     
     with open(input_file_path, newline='') as csvfile:
         
-        reader = csv.reader(csvfile, quotechar='"', delimiter=',', quoting=csv.QUOTE_NONE)
+        reader = csv.reader(csvfile, quotechar='"', delimiter=',')
         
         # Initializations
         current_row_idx = -1
@@ -23,23 +22,17 @@ def csv_remove_duplicates(input_file_path=None, drop_header=False,
         dups_cnt = 0
         dups_idx_list = []
         
-        
         if drop_header:
             next(reader)
-            current_row_idx += 1       
-        
+            current_row_idx += 1
             
         for row in reader:
             current_row_idx += 1
-            #remove unwanted chars
-            row_cln = row.copy()
-            for char in chars_to_remove:
-                row_cln = list(map(lambda x: x.replace(char,''), row_cln))
             
             final_row = []
-            for idx in range(len(row_cln)):
+            for idx in range(len(row)):
                 if idx not in cols_to_drop:
-                    final_row.append(row_cln[idx])
+                    final_row.append(row[idx])
                     
             # Ignore empty rows
             if len(final_row) == 0:
@@ -51,12 +44,13 @@ def csv_remove_duplicates(input_file_path=None, drop_header=False,
             else:
                 final_list_of_rows.append(final_row)
             
-            print(current_row_idx)
-            #print(row)
-            #print(row_cln)
-            print(final_row)
-        
-    output_file_path = input_file_path.replace('.csv','_output.csv')
+            if verbose: 
+                print(current_row_idx)
+                print(final_row)
+
+    if output_file_path is None:
+        output_file_path = os.path.split(input_file_path)[-1].replace('.csv', '_output.csv')
+
     with open(output_file_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL) # 
         
